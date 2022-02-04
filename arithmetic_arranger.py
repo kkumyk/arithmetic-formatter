@@ -10,20 +10,21 @@ def arithmetic_arranger(problem_list, result=False):
             problem = problem.split("+")
             if len(problem[0]) > 4 or len(problem[1]) > 4:
                 return "Error: Numbers cannot be more than four digits."
-            if type(problem[0]) != int or type(problem[1]) != int:
+            elif not(problem[0].isdigit() or problem[1].isdigit()):
                 return "Error: Numbers must only contain digits."
 
         elif "-" in problem:
             problem = problem.split("-")
             if len(problem[0]) > 4 or len(problem[1]) > 4:
                 return "Error: Numbers cannot be more than four digits."
-            if type(problem[0]) != int or type(problem[1]) != int:
+            elif not(problem[0].isdigit() or problem[1].isdigit()):
                 return "Error: Numbers must only contain digits."
 
         else:
             return "Error: Operator must be '+' or '-'."
 
         if not result:
+            res = ''
             line1 = ''
             line2 = ''
             line3 = ''
@@ -35,18 +36,23 @@ def arithmetic_arranger(problem_list, result=False):
                 for f in first_operands:
                     for o in operators:
                         for s in second_operands:
-                            # each operand not more than 4 digits
-                            # second line should also have two more chars: operator and a space b/w operator and sec operand
-                            # in total 6 spaces should be reserved
+                            # each operand not more than 4 digits second line should also have two more chars:
+                            # operator and a space b/w operator and sec operand in total 6 spaces should be reserved
                             # after each operand, four spaces need to be added
-                            line1 += " " * (6 - len(f)) + f + " " * 4
-                            # two spaces for operator and an empty space b/w operator and operand, plus four digit num
-                            line2 += o + " " * (5 - len(s)) + s + " " * 4
-                            line3 += "-" * 6 + " " * 4
-            print(line1 + '\n' + line2 + '\n' + line3 + '\n')
-            return line1 + '\n' + line2 + '\n' + line3 + '\n'
+                            longest_digit = max(len(f), len(s)) + 2
+                            line1 += f.rjust(longest_digit) + "    "
+                            line2 += o + s.rjust(longest_digit-1) + "    "
+                            line3 += "-" * longest_digit + "    "
+            line1 = line1.rstrip()
+            line2 = line2.rstrip()  # Removing the last four whitespaces from each line
+            line3 = line3.rstrip()
+            res += "\n".join([line1, line2, line3])
 
-# print(arithmetic_arranger(["32 + 698", "3801 - 2", "45 + 43", "123 + 49"]))
+        return res.rjust(longest_digit) + "    "
+
+# print(arithmetic_arranger(['3801 - 2', '123 + 49']))
+#
+# print(arithmetic_arranger(['3801 - 2', '123 + 49']))
 
 
 
